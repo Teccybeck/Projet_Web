@@ -20,7 +20,7 @@ body {
 .connexion {
     width: 500px;
     text-align: center;
-    background: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.7);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -59,7 +59,7 @@ button, .texte {
     border-top: 1px solid #fff;
     border-right: none;
     border-bottom: none;
-    box-shadow: 0px 1px 5px #ddd;
+    box-shadow: 0px 1px 5px rgb(139, 132, 132);
 }
 
 button {
