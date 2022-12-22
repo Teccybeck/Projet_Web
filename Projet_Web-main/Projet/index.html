@@ -1,0 +1,53 @@
+<!DOCTYPE html> <!--test-->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
+
+        <link href="https://fonts.googleapis.com/css2?family=Karla:wght@200&display=swap" rel="stylesheet">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styleAccueil.css">
+        <title>Accueil</title>
+    </head>
+
+    <body>
+        <div class="navbar">
+            <ul class = "menu">
+                <a href = "Login.html"><li id = "Connexion">Connexion</li></a>
+                <a href = "SignUp.html"><li id = "CreerCompte">Creer un compte</li></a>
+            </ul>
+        </div>
+
+        <div class="toolbar">
+            <img src = "restaurant.png" id = "restaurant" title='Restaurant'>
+            <button type = "button"  id = "developper">▽</button>
+        </div>
+
+        <div id="form">
+            <h1>Ajouter un point</h1>
+            <h2 id = "croix">X</h2>
+            <div class="champ">
+                <h3>Nom</h3>
+                <input type = "text" name = "nom" id = "nom" class="texte">
+            </div>
+            <div class="champ">
+                <h3>Avis</h3>
+                <textarea name = "avis" class = "texte" id = "avis"></textarea>
+            </div>
+            <button id = "valider" type = "button" id = "test">Valider</button>
+        </div>
+    
+        <div id="map"></div>
+
+        <div id="ombre"></div>
+        
+
+        <script src = "main.js"></script>
+    </body>
+    
+</html>
