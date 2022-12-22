@@ -81,7 +81,7 @@ button:hover, .texte:hover {
     outline: none;
 }
 
-a {
+.lien {
     font-size: small;
     font-weight: 900;
     text-decoration: none;
@@ -89,6 +89,6 @@ a {
     transition: all 0.2s;
 }
 
-a:hover {
+.lien:hover {
     color: rgb(128, 121, 121);
 }
