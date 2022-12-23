@@ -5,7 +5,7 @@ function verifCompte($nom,$prenom,$mail) {
         // se connecter à la base de données
         $pdo = seConnecterBD();
         // préparer (compiler => générer code exécutable) la requête
-        $sql="SELECT * FROM utilisateur where nom =:valnom and prenom =:valprenom and mail =:valmail";
+        $sql="SELECT * FROM utilisateur where Nom =:valnom and Prenom =:valprenom and AdresseMail =:valmail";
         $stmt = $pdo->prepare($sql);
         // initalisation des valeurs des paramètres de la requête (avant son exécution)
         $stmt->bindParam(":valnom", $nom);
