@@ -5,31 +5,25 @@ function verifCompte($nom,$prenom,$mail) {
         // se connecter à la base de données
         $pdo = seConnecterBD();
         // préparer (compiler => générer code exécutable) la requête
-        $sql="SELECT * FROM utilisateur where login =:vallogin and mdp =:valmdp";// a modif par le insert et faire verif avant
+        $sql="SELECT * FROM utilisateur where nom =:valnom and prenom =:valprenom and mail =:valmail";
         $stmt = $pdo->prepare($sql);
-        // initaliser la valeur des paramètres de la requête (avant son exécution)
-        $stmt->bindParam(":vallogin", $login);
-        $stmt->bindParam(":valmdp", $mdp);
+        // initalisation des valeurs des paramètres de la requête (avant son exécution)
+        $stmt->bindParam(":valnom", $nom);
+        $stmt->bindParam(":valprenom", $prenom);
+        $stmt->bindParam(":valmail", $mail);
         // exécuter la requête (par le au SGBD)
-        $bool = $stmt->execute();
-        // récuéprer le résultat de la requête dans un tabeau associatif
+        $stmt->execute();
+        // récuépation du résultat de la requête dans un tabeau associatif
         $resultats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // calculer le résultat de fonction (compte) à partir du résultat de la requête
-        $compte = null;
+        $existe = false;
         if (count ($resultats) > 0)
-            $compte = $resultats [0];
-        /* for ($resultats as $uneLigne){
-            ...
-        }
-        */
+            $existe = true;
+
         // fermer le curseur (libérer de la mémoire)
         $stmt->closeCursor();
-        // retourner la réponse calculée (compte)
-
 
         //si il existe return vrai sinon return false
-        return false;
-        return true;
+        return $existe;
     }
     catch (PDOException $e) {
         // Erreur à l'exécution de la requête
