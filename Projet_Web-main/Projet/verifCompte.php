@@ -1,6 +1,6 @@
 <?php // a modif tous!!!!
 require "connexionBD.php";
-function addCompte($nom,$prenom,$mail,$mdp) {
+function verifCompte($nom,$prenom,$mail) {
     try {
         // se connecter à la base de données
         $pdo = seConnecterBD();

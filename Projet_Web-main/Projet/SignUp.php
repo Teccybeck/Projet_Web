@@ -6,11 +6,13 @@ if($compte != null){
     include "./index.html";
 }else{
     include "./addCompte.php";
-
-    $login = $_REQUEST['login'];
+    include "./verifCompte.php";
+    $nom = $_REQUEST['nom'];
+    $prenom = $_REQUEST['prenom'];
+    $mail = $_REQUEST['mail'];
     $mdp = $_REQUEST['mdp'];
-
-    $compte = addCompte($login,$mdp);
+    $compteExiste = verifCompte($nom,$prenom,$mail);
+    $compte = addCompte($nom,$prenom,$mail,$mdp);
 
     if ($compte != null){
         $_SESSION['compte'] = $compte;
