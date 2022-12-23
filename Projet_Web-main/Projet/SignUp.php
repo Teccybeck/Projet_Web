@@ -12,7 +12,15 @@ if($compte != null){
     $mail = $_REQUEST['mail'];
     $mdp = $_REQUEST['mdp'];
     $compteExiste = verifCompte($nom,$prenom,$mail);
-    $compte = addCompte($nom,$prenom,$mail,$mdp);
+    if(!$compteExiste) {
+        $compte = addCompte($nom, $prenom, $mail, $mdp);
+
+        //ajout login a faire genre tu va sur la page de la carte quoi
+    }
+    else{
+        //informer que le compte existe
+    }
+
 
     if ($compte != null){
         $_SESSION['compte'] = $compte;

@@ -26,7 +26,10 @@ function verifCompte($nom,$prenom,$mail) {
         $stmt->closeCursor();
         // retourner la réponse calculée (compte)
 
-        return $compte;
+
+        //si il existe return vrai sinon return false
+        return false;
+        return true;
     }
     catch (PDOException $e) {
         // Erreur à l'exécution de la requête
