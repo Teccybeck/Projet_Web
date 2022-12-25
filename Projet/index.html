@@ -23,8 +23,11 @@
             </ul>
         </div>
 
-        <div class="toolbar">
-            <img src = "restaurant.png" id = "restaurant" title='Restaurant'>
+        <div id="toolbar">
+            <img src = "magasin.png" id = "magasin" title = "Magasin" class = "icones">
+            <img src = "monument.png" id = "monument" title = "Monument" class = "icones">
+            <img src = "restaurant.png" id = "restaurant" title='Restaurant' class = "icones">
+            <img src = "Croix.png" id = "suppr" title = "Supprimer" class = "icones">
             <button type = "button"  id = "developper">▽</button>
         </div>
 
@@ -36,10 +39,20 @@
                 <input type = "text" name = "nom" id = "nom" class="texte">
             </div>
             <div class="champ">
+                <h3>Note</h3>
+                <div id="etoiles">
+                    <button type = "button" name = "1" id = "1e" class = "butetoile">1⭐</button>
+                    <button type = "button" name = "2" id = "2e" class = "butetoile">2⭐</button>
+                    <button type = "button" name = "3" id = "3e" class = "butetoile">3⭐</button>
+                    <button type = "button" name = "4" id = "4e" class = "butetoile">4⭐</button>
+                    <button type = "button" name = "5" id = "5e" class = "butetoile">5⭐</button>
+                </div>
+            </div>
+            <div class="champ">
                 <h3>Avis</h3>
                 <textarea name = "avis" class = "texte" id = "avis"></textarea>
             </div>
-            <button id = "valider" type = "button" id = "test">Valider</button>
+            <button id = "valider" type = "button">Valider</button>
         </div>
     
         <div id="map"></div>

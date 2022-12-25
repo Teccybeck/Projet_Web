@@ -48,7 +48,7 @@ html, body {
     background-color: rgba(255,255,255, 0.3);
 }
 
-.toolbar {
+#toolbar {
     height: 33%;
     width: 60px;
     position: absolute;
@@ -63,9 +63,10 @@ html, body {
     align-items: center;
     box-shadow: 0px 0px 10px grey;
     gap: 2%;
+    transition: all 0.2s;
 }
 
-#restaurant{
+.icones{
     width: 60%;
     padding: 2px;
     border-radius: 20px;
@@ -73,8 +74,23 @@ html, body {
     transition: background 0.2s;
 }
 
-#restaurant:hover {
+.icones:hover {
     background: #ddd;
+}
+
+#suppr {
+    width: 40%;
+    padding: 6px;
+}
+
+#monument {
+    width : 70%;
+    padding: 0;
+}
+
+#magasin {
+    width: 50%;
+    padding: 5px;
 }
 
 #developper {
@@ -102,18 +118,16 @@ html, body {
 }
 
 .selectionne {
-    background-color: rgb(177, 175, 175);
+    background-color: rgb(192, 190, 190);
 }
 
-#form {
+#form{
     position: absolute;
-    height: 40%;
+    height: 50%;
     width: 33%;
-    top: 30%;
+    top: 25%;
     left: 33%;
-    background-color: #fff;
     border-radius: 20px;
-    z-index: 2;
     visibility: hidden;
     display: flex;
     flex-direction: column;
@@ -126,11 +140,11 @@ html, body {
     z-index: 30;
 }
 
-#form h1 {
+#form h1{
     padding-top: 10px;
 }
 
-.texte, #valider {
+.texte, #valider, .butetoile{
     border-radius: 20px;
     width: 100%;
     padding: 10px 5px;
@@ -142,13 +156,20 @@ html, body {
     box-shadow: 0px 1px 5px rgb(139, 132, 132);
 }
 
-.texte:hover, #valider:hover {
+.texte:hover, #valider:hover, .butetoile:hover {
     transform: scale(1.1);
     cursor: pointer;
 }
 
 .texte:focus {
     outline: none;
+}
+
+#etoiles {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    justify-content: center;
 }
 
 #valider {
@@ -196,4 +217,8 @@ textarea {
     opacity: 0.5;
     z-index: 20;
     visibility: hidden;
+}
+
+.incorecte {
+    border: 2px solid red;
 }
