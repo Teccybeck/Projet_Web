@@ -65,6 +65,7 @@ window.onload = function() {
 			icones[i].classList.remove('selectionne');
 			console.log(icones[i]);
 		}
+		cliquable = false;
 	}
 
 	function contien(tab, item){
@@ -119,6 +120,7 @@ window.onload = function() {
 			map.removeLayer(point);
 		}
 		cleanform();
+		clearselecttoolbar();// a modif
 	}
 
 	valider.onclick = function() {
