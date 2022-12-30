@@ -1,102 +1,8 @@
 window.onload = function() {
 
-	var cliquable = false;
-	var valide = false;
-	var developperbar = false;
-	var IconePoint = null;
-	var developper = document.getElementById('developper');
-	var toolbar = document.getElementById('toolbar');
-	var Restaurant = document.getElementById('restaurant');
-	var ombre = document.getElementById('ombre');
-	var form = document.getElementById('form');
-	var fermer = document.getElementById('croix');
-	var valider = document.getElementById('valider');
-	var nom = document.getElementById('nom');
-	var avis = document.getElementById('avis');
-	var etoiles = document.getElementsByClassName('butetoile');
-	var suppr = document.getElementById('suppr');
-	var icones = document.getElementsByClassName('icones');
-	var Monument = document.getElementById('monument');
-	var Magasin = document.getElementById('magasin');
-	var point = null;
-	var note = 0;
-	var modesuppr = false;
-	var selecetoile = false;
-	var tabpoints = [];
-
-	const map = L.map('map').setView([48.85854412462416, 2.3559542339166146], 13);
-
-	const IconRestaurant = L.icon({
-		iconUrl: 'restaurant.png',
-    	iconSize: [50, 50],
-	})
-
-	const IconMonument = L.icon({
-		iconUrl: 'Monument.png',
-    	iconSize: [55, 55],
-	})
-
-	const IconMagasin = L.icon({
-		iconUrl: 'magasin.png',
-    	iconSize: [33, 33],
-	})
-
-	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
-
 	initialiserboutons();
 
-	function selectionner(item) {
-		if(item.classList.contains('selectionne')){
-			item.classList.remove('selectionne');
-		}
-		else {
-			if(contien(icones,item)) {
-				clearselecttoolbar();
-			}
-			item.classList.add('selectionne');
-		}
-	}
-
-	function clearselecttoolbar() {
-		for(i = 0; i<icones.length; i++){
-			icones[i].classList.remove('selectionne');
-			console.log(icones[i]);
-		}
-		cliquable = false;
-	}
-
-	function contien(tab, item){
-		for(i=0; i<tab.length; i++){
-			if(tab[i] == item){
-				return true;
-			}
-		}
-		return false;
-	}
-
 	map.on('click', onMapClick);
-
-	function onMapClick(e) {
-		if(cliquable == true){
-			ombre.style.visibility = 'visible';
-			form.style.visibility = 'visible';
-			point = L.marker(e.latlng, {icon: IconePoint}).addTo(map);
-			tabpoints[tabpoints.length] = point;
-		}
-	}
-
-	function clickicone(icone) {
-		selectionner(icone);
-		if(cliquable){
-			cliquable = false;
-		}
-		else {
-			cliquable = true;
-		}
-	}
 
 	Restaurant.onclick = function() {
 		clickicone(Restaurant);
@@ -120,7 +26,6 @@ window.onload = function() {
 			map.removeLayer(point);
 		}
 		cleanform();
-		clearselecttoolbar();// a modif
 	}
 
 	valider.onclick = function() {
@@ -148,42 +53,6 @@ window.onload = function() {
 		}
 	}
 
-	function supprpoint(e) {
-		if(modesuppr) {
-			for(i=0; i<tabpoints.length; i++){
-				if(e.latlng == tabpoints[i].getLatLng()){
-					map.removeLayer(tabpoints[i]);
-					tabpoints.splice(i,1);
-				}
-			}
-		}
-	}
-
-	function cleanform(){
-		nom.value = '';
-		avis.value = '';
-		if(derniernote != -1){
-			selectionner(etoiles[derniernote]);
-			derniernote = -1;
-			selecetoile = false;
-		}
-		clearincorecte();
-	}
-
-	function clearincorecte(){
-		nom.classList.remove('incorecte');
-		for(i = 0; i<etoiles.length; i++){
-			etoiles[i].classList.remove('incorecte');
-		}
-	}
-
-	function infovalide(){
-		if(nom.value == '' || !selecetoile){
-			return false;
-		}
-		return true;
-	}
-
 	developper.onclick = function() {
 		if(!developperbar){
 			developperbar = true;
@@ -199,27 +68,6 @@ window.onload = function() {
 		}
 	}
 
-	var derniernote = -1;
-
-	function initialiserboutons(){
-		for(let i = 0; i<5; i++){
-			etoiles[i].onclick = function(){
-				if(selecetoile){
-					selecetoile = false;
-				}
-				else {
-					selecetoile = true;
-				}
-				selectionner(etoiles[i]);
-				if(derniernote != -1){
-					selectionner(etoiles[derniernote]);
-				}
-				note = etoiles[i].name;
-				derniernote = i;
-			}
-		}
-	}
-
 	suppr.onclick = function() {
 		selectionner(suppr);
 		if(modesuppr){
@@ -227,6 +75,192 @@ window.onload = function() {
 		}
 		else{
 			modesuppr = true;
+		}
+	}
+
+    map.on('zoomanim',function() {
+        if (map.getZoom() < 11) {
+            for(i=0; i<tabpoints.length; i++){
+                map.removeLayer(tabpoints[i]);
+
+            }
+        } 
+		else {
+            for(i=0; i<tabpoints.length; i++){
+                tabpoints[i].addTo(map);
+            }
+        }
+    });
+
+    moncompte.onclick = function() {
+		divcompte.style.visibility = 'visible';
+		ombre.style.visibility = 'visible';
+		divcompte.style.height = '100%';
+		divcompte.style.width = '20%';
+		divcompte.style.zIndex = '21';
+	};
+
+	fermercompte.onclick = function() {
+		divcompte.style.visibility = 'hidden';
+		ombre.style.visibility = 'hidden';
+		divcompte.style.height = '1%';
+		divcompte.style.width = '1%';
+		divcompte.style.zIndex = '3';
+	};
+
+}
+
+var cliquable = false;
+var valide = false;
+var developperbar = false;
+var IconePoint = null;
+var pointaffiches = true;
+var developper = document.getElementById('developper');
+var toolbar = document.getElementById('toolbar');
+var Restaurant = document.getElementById('restaurant');
+var ombre = document.getElementById('ombre');
+var form = document.getElementById('form');
+var fermer = document.getElementById('croix');
+var valider = document.getElementById('valider');
+var nom = document.getElementById('nom');
+var avis = document.getElementById('avis');
+var etoiles = document.getElementsByClassName('butetoile');
+var suppr = document.getElementById('suppr');
+var icones = document.getElementsByClassName('icones');
+var Monument = document.getElementById('monument');
+var Magasin = document.getElementById('magasin');
+var moncompte = document.getElementById('moncompte');
+var divcompte = document.getElementById('compte');
+var fermercompte = document.getElementById('fermercompte');
+var point = null;
+var derniernote = -1;
+var note = 0;
+var modesuppr = false;
+var selecetoile = false;
+var tabpoints = [];
+var zoom = 0;
+
+const map = L.map('map').setView([48.85854412462416, 2.3559542339166146], 13);
+
+const IconRestaurant = L.icon({
+	iconUrl: 'restaurant.png',
+    iconSize: [50, 50],
+})
+
+const IconMonument = L.icon({
+	iconUrl: 'Monument.png',
+    iconSize: [55, 55],
+})
+
+const IconMagasin = L.icon({
+	iconUrl: 'magasin.png',
+    iconSize: [33, 33],
+})
+
+const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+function selectionner(item) {
+	if(item.classList.contains('selectionne')){
+		item.classList.remove('selectionne');
+	}
+	else {
+		if(contien(icones,item)) {
+			clearselecttoolbar();
+		}
+		item.classList.add('selectionne');
+	}
+}
+
+function clearselecttoolbar() {
+	for(i = 0; i<icones.length; i++){
+		icones[i].classList.remove('selectionne');
+		console.log(icones[i]);
+	}
+	cliquable = false;
+}
+
+function contien(tab, item){
+	for(i=0; i<tab.length; i++){
+		if(tab[i] == item){
+			return true;
+		}
+	}
+	return false;
+}
+
+function onMapClick(e) {
+	if(cliquable == true){
+		ombre.style.visibility = 'visible';
+		form.style.visibility = 'visible';
+		point = L.marker(e.latlng, {icon: IconePoint}).addTo(map);
+		tabpoints[tabpoints.length] = point;
+	}
+}
+
+function clickicone(icone) {
+	selectionner(icone);
+	if(cliquable){
+		cliquable = false;
+	}
+	else {
+		cliquable = true;
+	}
+}
+
+function supprpoint(e) {
+	if(modesuppr) {
+		for(i=0; i<tabpoints.length; i++){
+			if(e.latlng == tabpoints[i].getLatLng()){
+				map.removeLayer(tabpoints[i]);
+				tabpoints.splice(i,1);
+			}
+		}
+	}
+}
+
+function cleanform(){
+	nom.value = '';
+	avis.value = '';
+	if(derniernote != -1){
+		selectionner(etoiles[derniernote]);
+		derniernote = -1;
+		selecetoile = false;
+	}
+	clearincorecte();
+}
+
+function clearincorecte(){
+	nom.classList.remove('incorecte');
+	for(i = 0; i<etoiles.length; i++){
+		etoiles[i].classList.remove('incorecte');
+	}
+}
+
+function infovalide(){
+	if(nom.value == '' || !selecetoile){
+		return false;
+	}
+	return true;
+}
+
+function initialiserboutons(){
+	for(let i = 0; i<5; i++){
+		etoiles[i].onclick = function(){
+			if(selecetoile){
+				selecetoile = false;
+			}
+			else {
+				selecetoile = true;
+			}
+			selectionner(etoiles[i]);
+			if(derniernote != -1){
+				selectionner(etoiles[derniernote]);
+			}
+			note = etoiles[i].name;
+			derniernote = i;
 		}
 	}
 }
