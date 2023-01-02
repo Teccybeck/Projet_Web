@@ -2,8 +2,20 @@ window.onload = function() {
 
 	initialiserboutons();
 
+	initialiserPoints();
+
 	map.on('click', onMapClick);
 
+	accueil.onclick = function () {
+		$.ajax({
+			type: 'GET',
+			url: 'phpRedirect.php',
+			success: function(reponse) {
+				console.log("blc")
+		}
+	});
+	}
+	
 	Restaurant.onclick = function() {
 		clickicone(Restaurant);
 		IconePoint = IconRestaurant;
@@ -19,6 +31,11 @@ window.onload = function() {
 		IconePoint = IconMagasin;
 	}
 
+	Theatre.onclick = function() {
+		clickicone(Theatre);
+		IconePoint = IconTheatre;
+	}
+
 	fermer.onclick = function() {
 		form.style.visibility = 'hidden';
 		ombre.style.visibility = 'hidden';
@@ -30,15 +47,45 @@ window.onload = function() {
 
 	valider.onclick = function() {
 		if(infovalide()){
+			/*
 			valide = true;
 			point.bindPopup("<h1 class = 'titlepopup'>" + nom.value + "</h1> <p class = 'avispopup'>" + avis.value + "</p>"
-			+ "<p id = 'etoilepopup'>" + note + "⭐</p>");
-			point.on('click',supprpoint);
+				+ "<p id = 'etoilepopup'>" + note + "⭐</p>");
+			//point.on('click',supprpoint);
+			tabpoints[tabpoints.length] = point;
 			fermer.onclick();
 			clearselecttoolbar();
 			cliquable = false;
 			valide = false;
 			selecetoile = false;
+
+			 */
+
+			var nomPoint = nom.value;
+			var avisPoint = avis.value;
+			var notePoint = note;
+			var Type = getType(point);
+			var X = lat;
+			var Y = long;
+			console.log(nomPoint," : ", avisPoint," : ", notePoint," : ", Type," : ", X," : ", Y);
+			$.ajax({
+				type: 'POST',
+				url: 'addPoint.php',
+				data: "nom=" + nomPoint + "&avis=" + avisPoint + "&note=" + notePoint + "&type=" + Type + "&X=" + X + "&Y=" + Y,
+				cache : false,
+				success: function(reponse) {
+					valide = true;
+					point.bindPopup("<h1 class = 'titlepopup'>" + nom.value + "</h1> <p class = 'avispopup'>" + avis.value + "</p>"
+					+ "<p id = 'etoilepopup'>" + note + "⭐</p>");
+					//point.on('click',supprpoint);
+					fermer.onclick();
+					clearselecttoolbar();
+					cliquable = false;
+					valide = false;
+					selecetoile = false;
+				}
+			})
+
 		}
 		else {
 			clearincorecte();
@@ -50,25 +97,12 @@ window.onload = function() {
 					etoiles[i].classList.add('incorecte');
 				}
 			}
+			if(avis.value == '')
+				avis.classList.add('incorecte')
 		}
 	}
 
-	developper.onclick = function() {
-		if(!developperbar){
-			developperbar = true;
-			toolbar.style.height = '50%';
-			toolbar.style.top = '25%';
-			developper.innerHTML = '△';
-		}
-		else {
-			developperbar = false;
-			toolbar.style.height = '33%';
-			toolbar.style.top = '33%';
-			developper.innerHTML = '▽';
-		}
-	}
-
-	suppr.onclick = function() {
+	/*suppr.onclick = function() {
 		selectionner(suppr);
 		if(modesuppr){
 			modesuppr = false;
@@ -76,46 +110,42 @@ window.onload = function() {
 		else{
 			modesuppr = true;
 		}
-	}
+	}*/
 
-    map.on('zoomanim',function() {
-        if (map.getZoom() < 11) {
-            for(i=0; i<tabpoints.length; i++){
-                map.removeLayer(tabpoints[i]);
-
-            }
-        } 
+	map.on('zoomanim',function() {
+		/*tabpoints = getPoints(); */
+		if (map.getZoom() < 11) {
+			for(i=0; i<tabpoints.length; i++){
+				map.removeLayer(tabpoints[i]);
+			}
+		}
 		else {
-            for(i=0; i<tabpoints.length; i++){
-                tabpoints[i].addTo(map);
-            }
-        }
-    });
+			for(i=0; i<tabpoints.length; i++){
+				tabpoints[i].addTo(map);
+			}
+		}
+	});
 
-    moncompte.onclick = function() {
+	moncompte.onclick = function() {
 		divcompte.style.visibility = 'visible';
 		ombre.style.visibility = 'visible';
 		divcompte.style.height = '100%';
 		divcompte.style.width = '20%';
-		divcompte.style.zIndex = '21';
 	};
 
 	fermercompte.onclick = function() {
 		divcompte.style.visibility = 'hidden';
 		ombre.style.visibility = 'hidden';
-		divcompte.style.height = '1%';
-		divcompte.style.width = '1%';
-		divcompte.style.zIndex = '3';
+		divcompte.style.height = '0%';
+		divcompte.style.width = '0%';
 	};
 
 }
 
 var cliquable = false;
 var valide = false;
-var developperbar = false;
 var IconePoint = null;
 var pointaffiches = true;
-var developper = document.getElementById('developper');
 var toolbar = document.getElementById('toolbar');
 var Restaurant = document.getElementById('restaurant');
 var ombre = document.getElementById('ombre');
@@ -125,42 +155,147 @@ var valider = document.getElementById('valider');
 var nom = document.getElementById('nom');
 var avis = document.getElementById('avis');
 var etoiles = document.getElementsByClassName('butetoile');
-var suppr = document.getElementById('suppr');
+//var suppr = document.getElementById('suppr');
+var Theatre = document.getElementById('theatre');
 var icones = document.getElementsByClassName('icones');
 var Monument = document.getElementById('monument');
 var Magasin = document.getElementById('magasin');
 var moncompte = document.getElementById('moncompte');
 var divcompte = document.getElementById('compte');
 var fermercompte = document.getElementById('fermercompte');
+var accueil = document.getElementById('accueil');
 var point = null;
 var derniernote = -1;
 var note = 0;
-var modesuppr = false;
+//var modesuppr = false;
 var selecetoile = false;
-var tabpoints = [];
+var tabpoints = []; // a enlever
 var zoom = 0;
+var type = '';
+var lat;
+var long;
 
 const map = L.map('map').setView([48.85854412462416, 2.3559542339166146], 13);
 
 const IconRestaurant = L.icon({
 	iconUrl: 'restaurant.png',
-    iconSize: [50, 50],
+	iconSize: [50, 50],
 })
 
 const IconMonument = L.icon({
 	iconUrl: 'Monument.png',
-    iconSize: [55, 55],
+	iconSize: [55, 55],
 })
 
 const IconMagasin = L.icon({
 	iconUrl: 'magasin.png',
-    iconSize: [33, 33],
+	iconSize: [33, 33],
+})
+
+const IconTheatre = L.icon({
+	iconUrl: 'theatre.png',
+	iconSize: [33, 33],
 })
 
 const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	maxZoom: 19,
 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+
+function initialiserPoints() {
+	$.ajax ({
+		type: 'GET',
+		url: 'recupPoints.php',
+		cache: false,
+		success: function(data) {
+			var tmpData = 0;
+			while(data.length > tmpData){
+				var tmpId ="";
+				var tmpNom= "";
+				var tmpNote = "";
+				var tmpAvis = "";
+				var tmpIdCli = "";
+				var tmpType = "";
+				var tmpCoordx = "";
+				var tmpCoordy = "";
+				while (data[tmpData] != '¤'){
+					tmpId += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpNom += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpNote += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpAvis += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpIdCli += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpType += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpCoordx += data[tmpData];
+					tmpData++;
+				}
+				tmpData++;
+				while (data[tmpData] != '¤'){
+					tmpCoordy += data[tmpData];
+					tmpData++;
+				}
+				var tmpIcone = getIcone(tmpType);
+				point = L.marker([tmpCoordx,tmpCoordy], {icon: tmpIcone}).addTo(map);
+				point.bindPopup("<h1 class = 'titlepopup'>" + tmpNom + "</h1> <p class = 'avispopup'>" + tmpAvis + "</p>"
+					+ "<p id = 'etoilepopup'>" + tmpNote + "⭐</p>");
+				tmpData++;
+			}
+			//console.log(data);
+			/*tabPoints = reponse;
+			for(i = 0; i<tabPoints.length; i++){
+				var tmpNom = tabPoints[i].nom;
+				var tmpNote = tabPoints[i].note;
+				var tmpAvis = tabPoints[i].avis;
+				var tmpType = tabPoints[i].idType;
+				var tmpIcone = getIcone(tmpType);
+				var tmpCoord = [tabPoints[i].x, tabPoints[i].y];
+				point = L.marker(tmpCoord, {icon: tmpIcone}).addTo(map);
+				point.bindPopup("<h1 class = 'titlepopup'>" + tmpNom + "</h1> <p class = 'avispopup'>" + tmpAvis + "</p>"
+					+ "<p id = 'etoilepopup'>" + tmpNote + "⭐</p>");
+			}
+
+			 */
+		}
+	})
+}
+
+function getIcone(nom) {
+	if(nom == 1){
+		return IconRestaurant;
+	}
+	if(nom == 2){
+		return IconMonument;
+	}
+	if(nom == 3){
+		return IconMagasin;
+	}
+	if(nom == 4){
+		return IconTheatre;
+	}
+}
 
 function selectionner(item) {
 	if(item.classList.contains('selectionne')){
@@ -196,7 +331,8 @@ function onMapClick(e) {
 		ombre.style.visibility = 'visible';
 		form.style.visibility = 'visible';
 		point = L.marker(e.latlng, {icon: IconePoint}).addTo(map);
-		tabpoints[tabpoints.length] = point;
+		lat = e.latlng.lat;
+		long = e.latlng.lng;
 	}
 }
 
@@ -210,7 +346,7 @@ function clickicone(icone) {
 	}
 }
 
-function supprpoint(e) {
+/*function supprpoint(e) {
 	if(modesuppr) {
 		for(i=0; i<tabpoints.length; i++){
 			if(e.latlng == tabpoints[i].getLatLng()){
@@ -219,7 +355,39 @@ function supprpoint(e) {
 			}
 		}
 	}
+
+
+	$.ajax({
+		type: 'POST';
+		url: 'supprPoint.php,
+		data: {e.latlng: coord},
+		suucess: function(reponse) {
+			for(i=0; i<tabpoints.length; i++){
+				if(e.latlng == tabpoints[i].getLatLng()){
+					map.removeLayer(tabpoints[i]);
+				}
+			}
+			map.removeLayer(L.marker(e.latlng)); // a changer
+		};
+	});
+
+
 }
+
+
+
+function getPointByCoord(coord) {
+	$ajax ({
+		type: 'GET',
+		url: 'getPointByCoord.php',
+		data: {coord: coord},
+		succes: function(reponse) {
+			return reponse;
+		}
+	})
+}
+
+*/
 
 function cleanform(){
 	nom.value = '';
@@ -237,10 +405,11 @@ function clearincorecte(){
 	for(i = 0; i<etoiles.length; i++){
 		etoiles[i].classList.remove('incorecte');
 	}
+	avis.classList.remove('incorecte');
 }
 
 function infovalide(){
-	if(nom.value == '' || !selecetoile){
+	if(nom.value == '' || !selecetoile || avis.value == ''){
 		return false;
 	}
 	return true;
@@ -262,5 +431,31 @@ function initialiserboutons(){
 			note = etoiles[i].name;
 			derniernote = i;
 		}
+	}
+}
+
+function getPoints() {
+	/*
+
+	$.ajax ({
+		type: 'GET',
+		url: 'recupPoints.php',
+		succes: function(reponse) {
+			return reponse;
+		}
+	})
+
+	*/
+}
+
+function getType(item){
+	if(item.getIcon() == IconMagasin){
+		return 3;
+	}
+	if(item.getIcon() == IconMonument){
+		return 2;
+	}
+	if(item.getIcon() == IconRestaurant){
+		return 1;
 	}
 }
