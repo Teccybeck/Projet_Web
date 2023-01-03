@@ -8,7 +8,7 @@ html, body {
     width: 100%;
     font-family: 'Karla', sans-serif;
     font-weight: 900;
-    overflow:hidden;
+    overflow-x:hidden;
 }
 
 .navbar {
@@ -267,4 +267,15 @@ textarea {
 
 #compte a:hover {
     background:rgba(255,255,255, 0.3)
+}
+
+#cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    z-index: 9; /*juste en dessous de la navbar*/
+    cursor: pointer;
 }

@@ -20,7 +20,7 @@ if(!empty($_POST['nom']) && !empty($_POST['prenom']) && !empty($_POST['AdresseMa
     if($row == 0){
         if(strlen($nom) <= 50){ // verifie longueur du nom <= 50
             if(strlen($prenom) <= 50){ //verifie longueur du prenom <= 50
-                if(strlen($AdresseMail) <= 100) {// verifie longueur du mail <= 50
+                if(strlen($AdresseMail) <= 100) {// verifie longueur du mail <= 100
                     if (strlen($mdp) <= 50) {
 
                         $insert = $bdd->prepare('INSERT INTO clients(Nom, Prenom, AdresseMail, mdp) VALUES(:nom, :prenom, :mail, :mdp)');
